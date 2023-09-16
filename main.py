@@ -19,121 +19,126 @@ while play.lower() != "no":
 
     game = Game(makeDeck()) # initialising a new game
 
-    print("You are now playing a game of Blackjack")
+    print("\nYou are now playing a new game of Blackjack")
 
     playerHand = game.createHand() # creating a hand for the player
     dealerHand = game.createHand()
 
-    print(f"Your hand {', '.join(playerHand)}")
-    
     playerScore = game.getHandValue(playerHand)
     dealerScore = game.getHandValue(dealerHand)
 
-    # print(game.deck)
-
-    if sum(playerScore) == 21 and sum(dealerScore) == 21:
+    if ("11A" in playerScore and 10 in playerScore) and ("11A" in dealerScore and 10 in dealerScore):
         print("Push! Neither player wins!")
 
-    elif sum(playerScore) == 21:
+    elif ("11A" in playerScore and 10 in playerScore) == 21:
         print("Blackjack! You win!")
         
-    elif sum(dealerScore) == 21:
+    elif ("11A" in dealerScore and 10 in dealerScore) == 21:
         print("Blackjack! The Dealer wins!")
 
     
     else:
-        # print(playerScore)
 
         keepGoing = True
+        
         while keepGoing:
-            playerScore = game.getHandValue(playerHand)
-            dealerScore = game.getHandValue(dealerHand)
-            if 11 in playerScore:
-                while True:
+
+            if "11A" in dealerScore:
+                dealerScore[dealerScore.index("11A")] = 11
+                
+
+            if "11A" in playerScore:
+
+                while True: 
                     print("You have an Ace in your hand. Would you like the Ace to be 1 or 11?")
+                    print("Your hand is {}".format(", ".join(playerHand)))
                     aceOr11 = input("1/11 > ")
 
                     try:
                         aceOr11 = int(aceOr11)
                             
-                        if aceOr11 == 1 or aceOr11 == 11:
-                            playerScore[playerScore.index(11)] = aceOr11
+                        if aceOr11 == 1:
+                            playerScore[playerScore.index("11A")] = 1
                             break
-                           
+                        
+                        elif aceOr11 == 11:
+                            playerScore[playerScore.index("11A")] = 11
+                            break
+
                         else:
                             print(invalid)
+
                     except ValueError:
                         print(invalid)
-
-                # while True:
-
-                #     print("You have an Ace in your hand. Would you like the Ace to be 11 or 1?")
-
-                #     aceOr11 = input("1/11 > ")
-
-                #     try:
-                #         aceOr11 = int(aceOr11)
-
-
-                #         if aceOr11 == 1:
-
-                #             playerScore[playerScore.index(11)] = 1
-                #             break
-                
-                #         elif aceOr11 == 11:
-                #             break
-                
-                #         else:
-                #             print(invalid)
-                    
-                #     except ValueError:
-                #         print(invalid)
             
+            print("Your hand is {}".format(", ".join(playerHand)))
             print(f"Your hand value is {sum(playerScore)}")
 
-            print("Would you like a hit? Y/N")
+            hitOrNot = "."
+            while hitOrNot != "" or sum(playerScore) < 21:
+                if sum(playerScore) > 24 or sum(playerScore) == 21 or game.playerHand == 5:
+                    break
 
-            hitOrNot = input("> ")
-
-            while True:
+                print("Would you like a hit? Y/N")
+                hitOrNot = input("> ")
+                
                 try:
-                    hitOrNot = hitOrNot.upper()
 
-                    if hitOrNot == "Y":
+                    hitOrNot = hitOrNot.upper()
+                    print("\n{}".format(hitOrNot))
+
+                    if hitOrNot.upper() == "Y":
                         card = random.choice(game.deck)
                         game.deck.remove(card)
                         playerHand.append(card)
 
                         playerScore = game.getHandValue(playerHand)
 
-
                         game.playerHand = game.playerHand + 1
-                        # print(game.playerHand)
 
-                        if sum(playerScore) > 24 or sum(playerScore) == 21 or game.playerHand == 5:
-                            break
+                        print("You got a {}".format(card))
 
                         break
                     
-                    elif hitOrNot == "N":
+                    elif hitOrNot.upper() == "N":
+                        
+                        print("Dont want a hit?")
+
+                        keepGoing = False
+                        hitOrNot = ""
                         break
 
                     else:
+
                         print(invalid + "...")
                         break
                 
                 except AttributeError:
-                    print(invalid)
+                    print(invalid + " Perhaps you entered a number?")
                     break
             
-            if sum(playerScore) > 24 or game.playerHand == 5:
+            if sum(playerScore) > 24 or sum(playerScore) == 21:
+                keepGoing = False
+                hitOrNot = ""
                 break
 
+    print("Hitting stage finished!\n")
     if sum(playerScore) == 21:
         print("21! You win!")
+        print("Dealers total hand value was {}".format(sum(dealerScore)))
+
+    elif sum(playerScore) > 24:
+        print("Bust! You lost! Your hand value was {}".format(sum(playerScore)))
+    
+    elif game.playerHand == 5:
+        print("5 card trick! You win!")
 
     elif sum(playerScore) <= sum(dealerScore) or sum(playerScore) > 24 or sum(dealerScore) == 21:
-        print("You lose!")
+        print("You lose! Your total was {}".format(sum(playerScore)))
+
+        # if sum(playerScore) < sum(dealerScore) and sum(dealerScore) != 21:
+        #     print("Bust! Your total was {}".format(sum(playerScore)))
+
 
         #     print(f"Your new hand is {', '.join(playerHand)} and the value is {playerScore}")
         # break
@@ -141,6 +146,10 @@ while play.lower() != "no":
     elif sum(playerScore) >= sum(dealerScore) or sum(playerScore) == 21:
         print("You win!")
 
+        if sum(playerScore) > sum(dealerScore):
+            print("Your total score was {}\nDealers score was {}.".format(sum(playerScore), sum(dealerScore)))
+
     print("Do you want to play again?")
 
     play = input("> ").lower()
+    
