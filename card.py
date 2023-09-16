@@ -48,18 +48,6 @@ class Game():
             hand.append(card)
         
         return hand
-    
-    # def createHand(self):
-    #     hand = []
-    #     for i in range(2):
-    #         if self.deck:
-    #             card = random.choice(self.deck)  # Draw a card from the deck
-    #             self.deck.remove(card)
-    #             hand.append(card)
-    #         else:
-    #             print("The deck is empty.")
-    #             break  # Stop drawing if the deck is empty
-    #     return hand 
 
     def getHandValue(self, hand):
         output = []
@@ -70,7 +58,7 @@ class Game():
                 output.append(10)
                 
             elif first == "Ace":
-                output.append(11) ## Return 11 if its an ace, this will be used later...
+                output.append("11A") ## Return 11 if its an ace, this will be used later...
                 
             else:
                 output.append(int(first))
