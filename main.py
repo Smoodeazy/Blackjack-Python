@@ -28,15 +28,19 @@ while play.lower() != "no":
     dealerScore = game.getHandValue(dealerHand)
 
     if ("11A" in playerScore and 10 in playerScore) and ("11A" in dealerScore and 10 in dealerScore):
+        playerScore[playerScore.index("11A")] = 11
+        dealerScore[dealerScore.index("11A")] = 11
+        
         print("Push! Neither player wins!")
 
     elif ("11A" in playerScore and 10 in playerScore) == 21:
+        playerScore[playerScore.index("11A")] = 11
         print("Blackjack! You win!")
         
     elif ("11A" in dealerScore and 10 in dealerScore) == 21:
+        dealerScore[dealerScore.index("11A")] = 11
         print("Blackjack! The Dealer wins!")
 
-    
     else:
 
         keepGoing = True
@@ -46,7 +50,6 @@ while play.lower() != "no":
             if "11A" in dealerScore:
                 dealerScore[dealerScore.index("11A")] = 11
                 
-
             if "11A" in playerScore:
 
                 while True: 
@@ -59,6 +62,7 @@ while play.lower() != "no":
                             
                         if aceOr11 == 1:
                             playerScore[playerScore.index("11A")] = 1
+                            print(", ".join(playerHand))
                             break
                         
                         elif aceOr11 == 11:
@@ -117,7 +121,7 @@ while play.lower() != "no":
                     print(invalid + " Perhaps you entered a number?")
                     break
             
-            if sum(playerScore) > 24 or sum(playerScore) == 21:
+            if sum(playerScore) > 21 or sum(playerScore) == 21:
                 keepGoing = False
                 hitOrNot = ""
                 break
@@ -127,7 +131,7 @@ while play.lower() != "no":
         print("21! You win!")
         print("Dealers total hand value was {}".format(sum(dealerScore)))
 
-    elif sum(playerScore) > 24:
+    elif sum(playerScore) > 21:
         print("Bust! You lost! Your hand value was {}".format(sum(playerScore)))
     
     elif game.playerHand == 5:
@@ -135,6 +139,7 @@ while play.lower() != "no":
 
     elif sum(playerScore) <= sum(dealerScore) or sum(playerScore) > 24 or sum(dealerScore) == 21:
         print("You lose! Your total was {}".format(sum(playerScore)))
+        print("Dealers total was {}".format(sum(dealerScore)))
 
         # if sum(playerScore) < sum(dealerScore) and sum(dealerScore) != 21:
         #     print("Bust! Your total was {}".format(sum(playerScore)))
@@ -152,4 +157,3 @@ while play.lower() != "no":
     print("Do you want to play again?")
 
     play = input("> ").lower()
-    
